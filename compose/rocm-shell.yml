@@ -1,0 +1,18 @@
+# Bare ROCm shell — sanity check that the GPU shows up inside a container.
+# Edit the image tag to whatever ROCm docs currently recommend.
+services:
+  rocm-shell:
+    image: rocm/dev-ubuntu-22.04:latest
+    # privileged is the lazy path; prefer device mounts when you can
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    group_add:
+      - video
+      - render
+    volumes:
+      - ../:/workspace:ro
+    working_dir: /workspace
+    stdin_open: true
+    tty: true
+    command: bash -lc "rocminfo | head -40; rocm-smi; exec bash"

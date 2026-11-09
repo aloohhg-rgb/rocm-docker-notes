@@ -1,0 +1,31 @@
+# vLLM on ROCm — stub. Image tags move fast; verify before you pull.
+# Set MODEL_ID / HF_TOKEN via env or a local .env (not committed).
+services:
+  vllm:
+    # placeholder — replace with a known-good ROCm vLLM image when you run this
+    image: vllm/vllm-openai:latest
+    # NOTE: upstream CUDA tag won't help on AMD. Swap to a ROCm build.
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    group_add:
+      - video
+      - render
+    environment:
+      - MODEL_ID=${MODEL_ID:-Qwen/Qwen2.5-7B-Instruct}
+      - HF_HOME=/hf_cache
+      # - HF_TOKEN=${HF_TOKEN}
+    volumes:
+      - ${HF_CACHE:-./hf_cache}:/hf_cache
+    ports:
+      - "8000:8000"
+    # ipc=host helps with shared memory for big models; YMMV
+    ipc: host
+    shm_size: "16gb"
+    command:
+      - "--model"
+      - "${MODEL_ID:-Qwen/Qwen2.5-7B-Instruct}"
+      - "--host"
+      - "0.0.0.0"
+      - "--port"
+      - "8000"
