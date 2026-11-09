@@ -1,0 +1,15 @@
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+*.log
+tmp/
+.DS_Store
+.idea/
+.vscode/
+*.swp
+models/
+weights/
+hf_cache/
+.cache/
